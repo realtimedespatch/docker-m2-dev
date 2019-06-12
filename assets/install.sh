@@ -18,6 +18,11 @@ DB_PORT=3066
 if [ -f ".env" ]; then
   # override defaults with existing config
   source .env
+else
+  MYSQL_DATABASE="magento"
+  MYSQL_USER="magento"
+  MYSQL_PASSWORD="918a9b2f3384"
+  MYSQL_ROOT_PASSWORD="70c6830775bb"
 fi
 
 project_name=$COMPOSE_PROJECT_NAME
@@ -70,10 +75,12 @@ echo "Copying docker-compose config to codebase..."
 cp /assets/docker-compose.yml .
 
 echo "Copy php container Dockerfile..."
-cp /assets/Dockerfile ./docker/php
+cp /assets/php/Dockerfile ./docker/php
 
 echo "Copy nginx vhost..."
-cp /assets/default.conf ./docker/nginx
+cp /assets/nginx/default.conf ./docker/nginx
+
+cp -rp /assets/bin/* ./bin/
 
 echo "Codebase directory permissions..."
 find var vendor pub/static pub/media app/etc -type d -exec chmod -R 777 {} \;
@@ -145,3 +152,5 @@ EOF
 
 echo "Build sample data..."
 php -f dev/tools/build-sample-data.php -- --ce-source="."
+
+touch var/.maintenance.flag

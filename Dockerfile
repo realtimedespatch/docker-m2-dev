@@ -26,12 +26,8 @@ RUN mkdir /assets && \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+COPY assets/ /assets/
 COPY assets/install.sh /install.sh
 RUN chmod +x /install.sh
 
-COPY assets/docker-compose.yml /assets
-COPY assets/nginx/default.conf /assets
-COPY assets/php/Dockerfile /assets
-
-#ENTRYPOINT /entrypoint.sh
 WORKDIR /app
